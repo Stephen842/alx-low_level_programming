@@ -1,13 +1,13 @@
-#include <stdio.h> 
+#include <stdio.h>
 
 /**
- * main - this will print the a sentence
+ * main - main function goes here
  *
- * return: 0 when it is succesful
+ * Return: 0 when it is succesful
  */
 
 int main(void)
 {
-     printf("with proper grammar, but the outcome is a piece of art,\n");
-     return (0);
+	printf("with proper grammar, but the outcome is a piece of art,\n");
+	return (0);
 }
