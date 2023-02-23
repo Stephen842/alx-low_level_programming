@@ -3,16 +3,17 @@
 /**
  * print_last_digit - function that prints the last digit of a number.
  *
- * @j: functikn parameter
- * Return: 1
+ * @i: function parameter
+ * Return: j
  */
 
-int print_last_digit(int j)
+int print_last_digit(int i)
 {
-	int i;
+	int j;
 
-	i = j % 10;
-	if (j < 0)
-		i = -i;
-	return (i);
+	j = i % 10;
+	if (i < 0)
+		j = -j;
+	_putchar(j + '0');
+	return (j);
 }
