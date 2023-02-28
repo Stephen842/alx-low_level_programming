@@ -9,9 +9,5 @@
 
 void reset_to_98(int *n)
 {
-
-	*p = &n;
-	*p = 98;
-	printf("Address of n is : %p\n", &n);
-	printf("Address of pointer is : %p\n", p);
+	*n = 98;	
 }
