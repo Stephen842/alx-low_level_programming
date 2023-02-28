@@ -9,22 +9,23 @@
 void puts2(char *str)
 {
 	int longi = 0;
-	int a = 0;
-	char *c = str;
-	int s;
+	int t = 0;
+	char *y = str;
+	int o;
 
-	while (*c != '\0')
+	while (*y != '\0')
 	{
-		c++;
+		y++;
 		longi++;
 	}
-	a = longi - 1;
-	for (s - 0 ; s <= a ; s++)
+	t = longi - 1;
+	for (o = 0 ; o <= t ; o++)
 	{
-		if (s % 2 == 0)
-		{
-			_putchar(str[s]);
-		}
+		if (o % 2 == 0)
+	{
+		_putchar(str[o]);
+	}
 	}
 	_putchar('\n');
 }
+
