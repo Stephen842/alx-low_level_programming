@@ -2,7 +2,9 @@
 #include <stdlib.h>
 /**
  * main - a program that multiplies two numbers.
- * 
+ * @argc: function parameter
+ * @argv: function parameter
+ * Return: 0 if successful
  */
 
 int main(int argc, char *argv[])
@@ -16,7 +18,7 @@ int main(int argc, char *argv[])
 		printf("Error\n");
 		return (1);
 	}
-	else 
+	else
 	{
 		i = atoi(argv[1]);
 		j = atoi(argv[2]);
