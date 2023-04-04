@@ -5,7 +5,7 @@
 #include <string.h>
 
 /**
- * listint_int - prints all the element of a linked listint_t list
+ * print_listint - prints all the element of a linked listint_t list
  * @h: function parameter
  * Return: 0 if successful
  */
