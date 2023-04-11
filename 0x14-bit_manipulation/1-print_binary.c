@@ -9,24 +9,20 @@
 
 void print_binary(unsigned long int n)
 {
-	unsigned long int bin_ary = (unsigned long int)1 << (sizeof(unsigned long int) * 8 - 1);
-	int start = 0;
+	int a;
+	int b;
 
-	while (bin_ary)
+	for (a = sizeof(unsigned long int) * 8 - 1; a >= 0; a--)
 	{
-		if (n & bin_ary)
+		if (n >> a & 1)
 		{
 			_putchar('1');
-			start = 1;
+			for (b = a - 1; b >= 0; b--)
+			{
+				_putchar((n >> b) & 1 ? '1' : '0');
+			}
+			return;
 		}
-		else if (start)
-		{
-			_putchar('0');
-		}
-		bin_ary >>= 1;
 	}
-	if (!start)
-	{
-		_putchar('0');
-	}
+	_putchar('0');
 }
