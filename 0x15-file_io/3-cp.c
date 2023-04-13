@@ -1,54 +1,104 @@
+#include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
+
+char *create_buffer(char *file);
+void close_file(int fd);
 
 /**
- * main - a program that copies the content of a file to another file.
- * @argc: argument count
- * @argv: argument vector
- * Return: 0 if successful
+ * create_buffer - Allocates 1024 bytes for a buffer.
+ * @file: The name of the file buffer is storing chars for.
+ *
+ * Return: A pointer to the newly-allocated buffer.
  */
+char *create_buffer(char *file)
+{
+	char *buffer;
 
+	buffer = malloc(sizeof(char) * 1024);
+
+	if (buffer == NULL)
+	{
+		dprintf(STDERR_FILENO,
+			"Error: Can't write to %s\n", file);
+		exit(99);
+	}
+
+	return (buffer);
+}
+
+/**
+ * close_file - Closes file descriptors.
+ * @fd: The file descriptor to be closed.
+ */
+void close_file(int fd)
+{
+	int c;
+
+	c = close(fd);
+
+	if (c == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		exit(100);
+	}
+}
+
+/**
+ * main - Copies the contents of a file to another file.
+ * @argc: The number of arguments supplied to the program.
+ * @argv: An array of pointers to the arguments.
+ *
+ * Return: 0 on success.
+ *
+ * Description: If the argument count is incorrect - exit code 97.
+ * If file_from does not exist or cannot be read - exit code 98.
+ * If file_to cannot be created or written to - exit code 99.
+ * If file_to or file_from cannot be closed - exit code 100.
+ */
 int main(int argc, char *argv[])
 {
-	FILE *source, *destination;
-	int ch;
+	int from, to, r, w;
+	char *buffer;
 
-	/* Check if the correct number of arguments have been passed*/
 	if (argc != 3)
 	{
-		fprintf(stderr, "Usage: %s <source> <destination>\n", argv[0]);
-		exit(1);
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
 	}
 
-	/* Open the source and destination files*/
-	source = fopen(argv[1], "rb");
-	destination = fopen(argv[2], "wb");
+	buffer = create_buffer(argv[2]);
+	from = open(argv[1], O_RDONLY);
+	r = read(from, buffer, 1024);
+	to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 
-	/* Check if the files were successfully opened*/
-	if (source == NULL || destination == NULL)
-	{
-		fprintf(stderr, "Error: Unable to open file.\n");
-		exit(1);
-	}
-
-	/* Copy the contents of the source file to the destination file*/
-	while ((ch = fgetc(source)) != EOF)
-	{
-		if (fputc(ch, destination) == EOF)
+	do {
+		if (from == -1 || r == -1)
 		{
-			fprintf(stderr, "Error: Failed to write to destination file.\n");
-			exit(1);
+			dprintf(STDERR_FILENO,
+				"Error: Can't read from file %s\n", argv[1]);
+			free(buffer);
+			exit(98);
 		}
-	}
 
-	/* Close the files*/
-	fclose(source);
-	fclose(destination);
+		w = write(to, buffer, r);
+		if (to == -1 || w == -1)
+		{
+			dprintf(STDERR_FILENO,
+				"Error: Can't write to %s\n", argv[2]);
+			free(buffer);
+			exit(99);
+		}
 
-	/* Set the permissions of the destination file to rw-rw-r-- */
-	chmod(argv[2], S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+		r = read(from, buffer, 1024);
+		to = open(argv[2], O_WRONLY | O_APPEND);
 
-	printf("File copied successfully.\n");
+	} while (r > 0);
+
+	free(buffer);
+	close_file(from);
+	close_file(to);
+
 	return (0);
 }
+
