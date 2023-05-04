@@ -9,5 +9,9 @@
 
 int get_bit(unsigned long int n, unsigned int index)
 {
-	i
+	unsigned long int a = 1UL << index;
+
+	if (index > 63)
+		return (-1);
+	return ((n & a) != 0);
 }
